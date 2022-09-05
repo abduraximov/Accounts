@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block content  %}
+
+<!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Surname</th>
+                                            <th>Age</th>
+                                            <th>Address</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Surname</th>
+                                            <th>Age</th>
+                                            <th>Address</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                    {% for user in users   %}
+                                        <tr>
+                                            
+                                            <td>{{ user.first_name }}</td>
+                                            <td>{{user.last_name }}</td>
+                                            <td>{{ user.age }}</td>
+                                            <td>{{ user.address }}</td>
+                                            
+                                            <td>
+                                            {% if request.user.is_superuser %} 
+                                              <a class="btn btn-success" href="{% url 'update' user.pk %}" > UPDATE </a> 
+                                              <a class="btn btn-danger delete-btn" href="#" data-toggle="modal" data-url="{% url 'delete' user.pk %}" data-target="#deleteModal">DELETE</a>
+                                            {% endif %}
+                                            </td>
+                                            
+                                        </tr>
+                                      {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+ <!-- Delete Modal-->
+        <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Delete" below if you are ready to end your current session.</div>
+                    <form method="POST" action="" id="#userForm">
+                        {% csrf_token %}
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>    
+                            {% comment %} <a class="btn btn-sm btn-danger" href="{% url 'delete' user.pk %}">Delete</a> {% endcomment %}
+                            <input type="submit" value="Delete">
+                        </div>
+                    </form>    
+                </div>
+            </div>
+        </div>
+{% endblock content %}
+         
